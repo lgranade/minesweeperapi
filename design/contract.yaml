@@ -1,0 +1,427 @@
+openapi: 3.0.0
+info:
+  title: Minesweeper API
+  version: '1.0'
+  description: Manages minesweeper game sessions
+servers:
+  - url: 'http://api.sweeper.com/v1'
+paths:
+  /auth:
+    description: Authenticate
+    post:
+      summary: Authenticate
+      operationId: post-auth
+      tags:
+        - Auth
+      description: Authenticate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                password:
+                  type: string
+              required:
+                - name
+                - password
+            example:
+              name: "lucas"
+              password: "123456"
+      responses:
+        '200':
+          description: Authenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+              example:
+                token: "dummyToken"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorReponse'
+              examples:
+                LackingParameters:
+                  value:
+                    error:
+                      code: 20666
+                      message: Lacking Parameters
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorReponse'
+              example:
+                value:
+                  error:
+                    code: 20999
+                    message: Unauthorized
+  /users:
+    description: Manage users
+    post:
+      summary: Create a new user
+      operationId: post-users
+      tags:
+        - Users
+      description: Create a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                password:
+                  type: string
+              required:
+                - name
+                - password
+            examples:
+              Simple:
+                value:
+                  name: "lucas"
+                  password: "123456"
+      responses:
+        '201':
+          description: User Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorReponse'
+              examples:
+                LackingParameters:
+                  value:
+                    error:
+                      code: 20999
+                      message: Lacking Parameters
+                PasswordTooWeak:
+                  value:
+                    error:
+                      code: 20999
+                      message: PasswordTooWeak
+  '/users/{userId}':
+    parameters:
+      - schema:
+          type: string
+        name: userId
+        in: path
+        required: true
+        description: User ID
+    get:
+      summary: Reads user
+      operationId: get-users-id
+      tags:
+        - Users        
+      description: Read user
+      security:
+        - token: []
+      responses:
+        '200':
+          description: User Read
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorReponse'
+              example:
+                value:
+                  error:
+                    code: 20999
+                    message: Unauthorized
+  /games:
+    description: Manage game sessions
+    post:
+      summary: Create a game session
+      operationId: post-games
+      description: Create a game session
+      tags:
+        - Games
+      security:
+        - token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rows:
+                  type: integer
+                columns:
+                  type: integer
+                mines:
+                  type: integer
+            examples:
+              Standard:
+                value:
+                  rows: 16
+                  columns: 30
+                  mines: 100
+      responses:
+        '201':
+          description: Game Session Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorReponse'
+              examples:
+                BadFormat:
+                  value:
+                    error:
+                      code: 20999
+                      message: Bad Format
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorReponse'
+              example:
+                value:
+                  error:
+                    code: 20999
+                    message: Unauthorized
+  '/games/{gameId}':
+    parameters:
+      - schema:
+          type: string
+        name: gameId
+        in: path
+        required: true
+        description: Game Id
+    get:
+      summary: Reads a game
+      operationId: get-games-id
+      tags:
+        - Games
+      description: Read game
+      security:
+        - token: []
+      responses:
+        '200':
+          description: Game Read
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorReponse'
+              example:
+                value:
+                  error:
+                    code: 20999
+                    message: Unauthorized
+  '/games/{gameId}/play':
+    parameters:
+      - schema:
+          type: string
+        name: gameId
+        in: path
+        required: true
+        description: Game Id
+    post:
+      summary: Reads a game
+      operationId: post-games-play
+      tags:
+        - Games
+      description: Make a play
+      security:
+        - token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                row:
+                  type: integer
+                column:
+                  type: integer
+                action:
+                  type: string
+            examples:
+              Step:
+                value:
+                  row: 8
+                  columns: 15
+                  action: step
+              Flag:
+                value:
+                  row: 8
+                  columns: 15
+                  action: flag
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorReponse'
+              examples:
+                BadFormat:
+                  value:
+                    error:
+                      code: 20999
+                      message: Bad Format
+                LackingParameters:
+                  value:
+                    error:
+                      code: 20999
+                      message: Lacking Parameters
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorReponse'
+              example:
+                value:
+                  error:
+                    code: 20999
+                    message: Unauthorized
+  '/games/{gameId}/pause':
+    parameters:
+      - schema:
+          type: string
+        name: gameId
+        in: path
+        required: true
+        description: Game Id
+    post:
+      summary: Pauses the game
+      operationId: post-games-pause
+      tags:
+        - Games
+      description: Pauses the game so the clock stops ticking
+      security:
+        - token: []
+      responses:
+        '200':
+          description: Result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorReponse'
+              example:
+                value:
+                  error:
+                    code: 20999
+                    message: Unauthorized
+components:
+  schemas:
+    User:
+      title: User
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        createdAt:
+          type: integer
+          format: timestamp
+    Game:
+      title: Game
+      type: object
+      description: 'Represents one game session'
+      properties:
+        id:
+          type: string
+          format: uuid
+        user:
+          type: string
+          format: uuid
+        status:
+          type: string
+        rows:
+          type: integer
+        columns:
+          type: integer
+        mines:
+          type: integer
+        accumulatedSeconds:
+          type: integer
+        minesLeft:
+          type: integer
+        board:
+          type: array
+          items:
+            type: array
+            items:
+              type: integer
+              example: 1          
+        createdAt:
+          type: integer
+          format: timestamp
+    Error:
+      title: Error
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      description: Error object returned inside a response that returned an http error code
+    ErrorReponse:
+      title: ErrorReponse
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      description: Response body returned on error          
+  securitySchemes:
+    token:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: ''
+          tokenUrl: ''
+          refreshUrl: ''
+          scopes: {}
+        password:
+          tokenUrl: ''
+          refreshUrl: ''
+          scopes: {}
