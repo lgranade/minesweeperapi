@@ -273,12 +273,12 @@ paths:
               Step:
                 value:
                   row: 8
-                  columns: 15
+                  column: 15
                   action: step
               Flag:
                 value:
                   row: 8
-                  columns: 15
+                  column: 15
                   action: flag
       responses:
         '200':

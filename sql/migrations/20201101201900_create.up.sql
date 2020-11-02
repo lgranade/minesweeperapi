@@ -9,10 +9,10 @@ create table account (
 
 create table game (
   id uuid not null,
-  account_id not null,
-  row_amount integer not null,
-  column_amount integer not null,
-  accumulated_seconds integer not null,
+  account_id uuid not null,
+  row_amount int not null,
+  column_amount int not null,
+  accumulated_seconds int not null,
   board text not null,
   game_status smallint not null,
   created_at timestamp not null default now(),

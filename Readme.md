@@ -16,7 +16,7 @@ The database is an RDS postgres instance (free tier too).
 
 ## Database Schema
 
-Migrations are stored in `/migrations`
+Migrations are stored in `/sql/migrations`
 
 ## Build
 
@@ -31,3 +31,7 @@ To build the image just run
 ```bash
 $ make build
 ```
+
+## Notes
+
+* In db the name used for user is accout because user is kind of a reserved word in postgresql
