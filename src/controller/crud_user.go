@@ -40,7 +40,6 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 // ReadUser reads an existing user
 func ReadUser(w http.ResponseWriter, r *http.Request) {
-
 	userID, err := uuid.Parse(chi.URLParam(r, "userID"))
 	if err != nil {
 		apiError(w, r, http.StatusBadRequest, "Error parsing parameter, read documentation", IErrorIllFormedRequest)

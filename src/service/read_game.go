@@ -43,6 +43,7 @@ func fillGameFromDB(mGame *model.Game, dbGame *minesweeper.Game) error {
 	mGame.Rows = int(dbGame.RowAmount)
 	mGame.Columns = int(dbGame.ColumnAmount)
 	mGame.CreatedAt = dbGame.CreatedAt.Unix()
+	mGame.ResumedAt = dbGame.ResumedAt.Unix()
 
 	err := json.Unmarshal([]byte(dbGame.Board), &mGame.Board)
 	if err != nil {

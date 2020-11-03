@@ -27,4 +27,5 @@ type Game struct {
 	CellsStepped       int32     `json:"cells_stepped"`
 	GameStatus         string    `json:"game_status"`
 	CreatedAt          time.Time `json:"created_at"`
+	ResumedAt          time.Time `json:"resumed_at"`
 }

@@ -2,9 +2,9 @@ package model
 
 // Cell represents a cell in the board
 type Cell struct {
-	Type   CellType   `json:"t,omitempty"`
-	Action CellAction `json:"a,omitempty"`
-	Value  int        `json:"v,omitempty"`
+	Type   CellType   `json:"t"`
+	Action CellAction `json:"a"`
+	Value  int        `json:"v"`
 	Row    int        `json:"-"`
 	Column int        `json:"-"`
 	Game   *Game      `json:"-"`

@@ -16,3 +16,6 @@ var ErrForbidden = errors.New("Command not allowed or the resource belongs to so
 
 // ErrOutsideBoardBoundaries is returned when command outside boundaries
 var ErrOutsideBoardBoundaries = errors.New("Cell outside board")
+
+// ErrGameNonCompatibleStatus is returned when trying to play on a game that is not playing
+var ErrGameNonCompatibleStatus = errors.New("Game with not compatible status")

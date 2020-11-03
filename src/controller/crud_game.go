@@ -41,7 +41,6 @@ func CreateGame(w http.ResponseWriter, r *http.Request) {
 
 // ReadGame reads an existing game
 func ReadGame(w http.ResponseWriter, r *http.Request) {
-
 	gameID, err := uuid.Parse(chi.URLParam(r, "gameID"))
 	if err != nil {
 		apiError(w, r, http.StatusBadRequest, "Error parsing parameter, read documentation", IErrorIllFormedRequest)

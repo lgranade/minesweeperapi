@@ -19,6 +19,7 @@ create table game (
   cells_stepped int not null,
   game_status varchar(32) not null,
   created_at timestamp not null default now(),
+  resumed_at timestamp not null default now(),
   primary key (id),
   constraint game_accountid_fk foreign key (account_id) references account (id)
 );

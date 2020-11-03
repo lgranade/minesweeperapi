@@ -9,18 +9,19 @@ import (
 
 // Game represents the public model for a game session
 type Game struct {
-	ID                 uuid.UUID  `json:"id,omitempty"`
-	UserID             uuid.UUID  `json:"userId,omitempty"`
-	Status             GameStatus `json:"status,omitempty"`
-	Rows               int        `json:"rows,omitempty"`
-	Columns            int        `json:"columns,omitempty"`
-	Mines              int        `json:"mines,omitempty"`
-	AccumulatedSeconds int        `json:"accumulatedSeconds,omitempty"`
-	MinesLeft          int        `json:"minesLeft,omitempty"`
+	ID                 uuid.UUID  `json:"id"`
+	UserID             uuid.UUID  `json:"userId"`
+	Status             GameStatus `json:"status"`
+	Rows               int        `json:"rows"`
+	Columns            int        `json:"columns"`
+	Mines              int        `json:"mines"`
+	AccumulatedSeconds int        `json:"accumulatedSeconds"`
+	MinesLeft          int        `json:"minesLeft"`
+	CreatedAt          int64      `json:"createdAt"`
 	Board              [][]Cell   `json:"board,omitempty"`
 	CellsStepped       int        `json:"-"`
 	CellAmount         int        `json:"-"`
-	CreatedAt          int64      `json:"createdAt,omitempty"`
+	ResumedAt          int64      `json:"-"`
 }
 
 // GameStatus represents the status of the game

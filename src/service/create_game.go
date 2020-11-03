@@ -38,6 +38,8 @@ func CreateGame(ctx context.Context, userID uuid.UUID, rows int, columns int, mi
 		Mines:              int32(game.Mines),
 		MinesLeft:          int32(game.MinesLeft),
 		GameStatus:         string(model.GameCreated),
+		CreatedAt:          time.Unix(game.CreatedAt, 0),
+		ResumedAt:          time.Unix(game.ResumedAt, 0),
 	})
 	if err != nil {
 		log.Println("Error occurred creating game in local db: ", err)
@@ -65,7 +67,10 @@ func buildGame(userID uuid.UUID, rows int, columns int, mines int) *model.Game {
 		Board:              nil,
 		CellsStepped:       0,
 		CellAmount:         rows * columns,
+		CreatedAt:          time.Now().Unix(),
 	}
+	game.ResumedAt = game.CreatedAt
+
 	setBoard(game, createMines(game.Rows, game.Columns, game.Mines))
 	return game
 }

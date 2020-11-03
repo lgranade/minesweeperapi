@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"log"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/lgranade/minesweeperapi/dao"
@@ -43,6 +44,17 @@ func Play(ctx context.Context, userID uuid.UUID, gameID uuid.UUID, row int, colu
 	game := &model.Game{}
 	fillGameFromDB(game, &dbGame)
 
+	if game.Status != model.GameCreated &&
+		game.Status != model.GamePlaying &&
+		game.Status != model.GamePaused {
+		return nil, ErrGameNonCompatibleStatus
+	}
+	if game.Status == model.GameCreated ||
+		game.Status == model.GamePaused {
+		game.ResumedAt = time.Now().Unix()
+		game.Status = model.GamePlaying
+	}
+
 	if game.UserID != userID {
 		log.Println("Game belongs to differen user")
 		return nil, ErrForbidden
@@ -56,6 +68,7 @@ func Play(ctx context.Context, userID uuid.UUID, gameID uuid.UUID, row int, colu
 		Board:              game.BoardString(),
 		MinesLeft:          int32(game.MinesLeft),
 		CellsStepped:       int32(game.CellsStepped),
+		ResumedAt:          time.Unix(game.ResumedAt, 0),
 		ID:                 game.ID,
 	})
 
@@ -85,7 +98,10 @@ func calculatePlay(game *model.Game, row int, column int, action PlayAction) err
 		stepPlay(cell)
 	}
 
-	// TODO: check if game finished
+	if game.CellAmount-game.CellsStepped == game.Mines {
+		game.Status = model.GameWon
+		game.AccumulatedSeconds += int(time.Now().Unix() - game.ResumedAt)
+	}
 
 	return nil
 }
