@@ -19,3 +19,6 @@ var ErrOutsideBoardBoundaries = errors.New("Cell outside board")
 
 // ErrGameNonCompatibleStatus is returned when trying to play on a game that is not playing
 var ErrGameNonCompatibleStatus = errors.New("Game with not compatible status")
+
+// ErrUnrecognizedAction is returned when trying to perform unrecognized action
+var ErrUnrecognizedAction = errors.New("Action not recognized")

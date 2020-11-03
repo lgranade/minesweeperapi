@@ -60,7 +60,10 @@ func Play(ctx context.Context, userID uuid.UUID, gameID uuid.UUID, row int, colu
 		return nil, ErrForbidden
 	}
 
-	calculatePlay(game, model.Coord{Row: row, Col: column}, action)
+	err = calculatePlay(game, model.Coord{Row: row, Col: column}, action)
+	if err != nil {
+		return nil, err
+	}
 
 	_, err = q.UpdateGame(ctx, minesweeper.UpdateGameParams{
 		AccumulatedSeconds: int32(game.AccumulatedSeconds),
@@ -96,6 +99,8 @@ func calculatePlay(game *model.Game, coord model.Coord, action PlayAction) error
 		}
 	} else if action == StepPlay {
 		stepPlay(game, coord)
+	} else {
+		return ErrUnrecognizedAction
 	}
 
 	if game.CellAmount-game.CellsStepped == game.Mines {
