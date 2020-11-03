@@ -16,6 +16,7 @@ create table game (
   board text not null,
   mines int not null,
   mines_left int not null,
+  cells_stepped int not null,
   game_status varchar(32) not null,
   created_at timestamp not null default now(),
   primary key (id),

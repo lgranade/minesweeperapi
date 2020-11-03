@@ -18,6 +18,8 @@ var game6By6 = &model.Game{
 	Mines:              5,
 	AccumulatedSeconds: 0,
 	MinesLeft:          5,
+	CellAmount:         6 * 6,
+	CellsStepped:       0,
 	Board: [][]model.Cell{
 		[]model.Cell{
 			model.Cell{
@@ -289,7 +291,6 @@ var game6By6 = &model.Game{
 			},
 		},
 	},
-	CellAmount: 6 * 6,
 }
 
 var mines6By6 = map[int]bool{

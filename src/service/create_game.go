@@ -24,16 +24,7 @@ func CreateGame(ctx context.Context, userID uuid.UUID, rows int, columns int, mi
 
 	defer tx.Rollback()
 
-	// TODO: uncomment this when user creation is implemented
-	// verify the user exists
-	// dbAccount, err := q.GetAccountByID(ctx, userID)
-	// if err != nil {
-	// 	if err != sql.ErrNoRows {
-	// 		log.Println("Error occurred querying user by email: ", err)
-	// 		return nil, ErrInternal
-	// 	}
-	// 	return nil, ErrNonexistentUser
-	// }
+	// TODO: check the user actually exists in db, if not return forbidden
 
 	game := buildGame(userID, rows, columns, mines)
 
@@ -56,7 +47,7 @@ func CreateGame(ctx context.Context, userID uuid.UUID, rows int, columns int, mi
 		GameStatus:         string(model.GameCreated),
 	})
 	if err != nil {
-		log.Println("Error occurred creating invitation in local db: ", err)
+		log.Println("Error occurred creating game in local db: ", err)
 		return nil, ErrInternal
 	}
 

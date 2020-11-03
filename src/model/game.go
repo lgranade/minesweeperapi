@@ -13,6 +13,7 @@ type Game struct {
 	AccumulatedSeconds int        `json:"accumulatedSeconds,omitempty"`
 	MinesLeft          int        `json:"minesLeft,omitempty"`
 	Board              [][]Cell   `json:"board,omitempty"`
+	CellsStepped       int        `json:"-"`
 	CellAmount         int        `json:"-"`
 	CreatedAt          int64      `json:"createdAt,omitempty"`
 }
