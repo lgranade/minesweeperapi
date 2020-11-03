@@ -94,8 +94,10 @@ func calculatePlay(game *model.Game, coord model.Coord, action PlayAction) error
 		// flag acts as a toggle
 		if cell.Action == model.NoAction {
 			cell.Action = model.FlagAction
+			game.MinesLeft--
 		} else if cell.Action == model.FlagAction {
 			cell.Action = model.NoAction
+			game.MinesLeft++
 		}
 	} else if action == StepPlay {
 		stepPlay(game, coord)
