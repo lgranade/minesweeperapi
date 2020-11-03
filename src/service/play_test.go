@@ -14,7 +14,7 @@ func TestPlayStepEmptyCell(t *testing.T) {
 	game.Board = [][]model.Cell{}
 	setBoard(&game, mines6By6)
 
-	calculatePlay(&game, 0, 3, StepPlay)
+	calculatePlay(&game, model.Coord{Row: 0, Col: 3}, StepPlay)
 
 	stepped := 0
 
@@ -41,7 +41,7 @@ func TestPlayStepNumberCell(t *testing.T) {
 	game.Board = [][]model.Cell{}
 	setBoard(&game, mines6By6)
 
-	calculatePlay(&game, 0, 0, StepPlay)
+	calculatePlay(&game, model.Coord{Row: 0, Col: 0}, StepPlay)
 
 	stepped := 0
 

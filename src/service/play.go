@@ -60,7 +60,7 @@ func Play(ctx context.Context, userID uuid.UUID, gameID uuid.UUID, row int, colu
 		return nil, ErrForbidden
 	}
 
-	calculatePlay(game, row, column, action)
+	calculatePlay(game, model.Coord{Row: row, Col: column}, action)
 
 	_, err = q.UpdateGame(ctx, minesweeper.UpdateGameParams{
 		AccumulatedSeconds: int32(game.AccumulatedSeconds),
@@ -80,12 +80,12 @@ func Play(ctx context.Context, userID uuid.UUID, gameID uuid.UUID, row int, colu
 	return game, nil
 }
 
-func calculatePlay(game *model.Game, row int, column int, action PlayAction) error {
-	if row >= game.Rows || column >= game.Columns {
+func calculatePlay(game *model.Game, coord model.Coord, action PlayAction) error {
+	if coord.Row >= game.Rows || coord.Col >= game.Columns {
 		return ErrOutsideBoardBoundaries
 	}
 
-	cell := &game.Board[row][column]
+	cell := game.Get(coord)
 
 	if action == FlagPlay {
 		// flag acts as a toggle
@@ -95,7 +95,7 @@ func calculatePlay(game *model.Game, row int, column int, action PlayAction) err
 			cell.Action = model.NoAction
 		}
 	} else if action == StepPlay {
-		stepPlay(cell)
+		stepPlay(game, coord)
 	}
 
 	if game.CellAmount-game.CellsStepped == game.Mines {
@@ -106,16 +106,18 @@ func calculatePlay(game *model.Game, row int, column int, action PlayAction) err
 	return nil
 }
 
-func stepPlay(cell *model.Cell) {
+func stepPlay(game *model.Game, coord model.Coord) {
+	cell := game.Get(coord)
 	if cell.Action == model.NoAction || cell.Action == model.FlagAction {
 		cell.Action = model.StepAction
-		cell.Game.CellsStepped++
+		game.CellsStepped++
 		if cell.Type == model.MineCell {
-			cell.Game.Status = model.GameLost
+			game.Status = model.GameLost
 		} else if cell.Value == 0 {
-			for _, sc := range cell.Surrounding() {
-				if sc.Action == model.NoAction {
-					stepPlay(sc)
+			for _, sc := range game.Surrounding(coord) {
+				sCell := game.Get(sc)
+				if sCell.Action == model.NoAction {
+					stepPlay(game, sc)
 				}
 			}
 		}

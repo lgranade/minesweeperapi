@@ -77,7 +77,7 @@ func buildGame(userID uuid.UUID, rows int, columns int, mines int) *model.Game {
 
 func setBoard(game *model.Game, createdMines map[int]bool) {
 	game.Board = make([][]model.Cell, game.Rows)
-	mineCellsCache := make([]*model.Cell, game.Mines)
+	mineCellsCache := make([]model.Coord, game.Mines)
 	k := 0
 	for i := range game.Board {
 		game.Board[i] = make([]model.Cell, game.Columns)
@@ -86,13 +86,11 @@ func setBoard(game *model.Game, createdMines map[int]bool) {
 			cell := model.Cell{
 				Type:   model.NumberCell,
 				Action: model.NoAction,
-				Row:    i,
-				Column: j,
-				Game:   game,
 			}
 			if _, ok := createdMines[ci]; ok {
 				cell.Type = model.MineCell
-				mineCellsCache[k] = &cell
+				mineCellsCache[k].Row = i
+				mineCellsCache[k].Col = j
 				k++
 			}
 			game.Board[i][j] = cell
@@ -100,10 +98,11 @@ func setBoard(game *model.Game, createdMines map[int]bool) {
 	}
 
 	// increment value on all cells surrounding each mine
-	for _, mc := range mineCellsCache {
-		for _, sc := range mc.Surrounding() {
-			if sc.Type == model.NumberCell {
-				sc.Value++
+	for _, coord := range mineCellsCache {
+		for _, sc := range game.Surrounding(coord) {
+			cell := game.Get(sc)
+			if cell.Type == model.NumberCell {
+				cell.Value++
 			}
 		}
 	}
