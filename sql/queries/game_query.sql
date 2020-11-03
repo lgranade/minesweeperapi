@@ -10,6 +10,10 @@ returning *;
 select * from game
 where id = $1;
 
+-- name: GetAndLockGameByID :one
+select * from game
+where id = $1 for update;
+
 -- name: UpdateGame :one
 update game
 set accumulated_seconds = $1, game_status = $2, board = $3, mines_left = $4, cells_stepped = $5

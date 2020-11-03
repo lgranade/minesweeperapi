@@ -1,6 +1,11 @@
 package model
 
-import "github.com/google/uuid"
+import (
+	"encoding/json"
+	"log"
+
+	"github.com/google/uuid"
+)
 
 // Game represents the public model for a game session
 type Game struct {
@@ -37,3 +42,12 @@ const (
 	// GameWon indicates that the user has won this game
 	GameWon GameStatus = "won"
 )
+
+// BoardString serializes board to be stored in db
+func (g *Game) BoardString() string {
+	boardRaw, err := json.Marshal(&g.Board)
+	if err != nil {
+		log.Println("Bug: An error occurred trying to store in db, err: ", err)
+	}
+	return string(boardRaw)
+}

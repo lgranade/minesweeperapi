@@ -34,6 +34,8 @@ $ make build
 
 ## Notes
 
+* User should be taken from access token by design but first version has user id hardcoded.
+
 * Randomizer for mine positioning might not be random enought. Should improve this.
 
 * On board creation the mines are created, but it should be done such as to avoid the first click of the user, to make sure he doesn't loose on the first move. Not implemented in first release.

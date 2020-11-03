@@ -61,6 +61,30 @@ func (q *Queries) CreateGame(ctx context.Context, arg CreateGameParams) (Game, e
 	return i, err
 }
 
+const getAndLockGameByID = `-- name: GetAndLockGameByID :one
+select id, account_id, row_amount, column_amount, accumulated_seconds, board, mines, mines_left, cells_stepped, game_status, created_at from game
+where id = $1 for update
+`
+
+func (q *Queries) GetAndLockGameByID(ctx context.Context, id uuid.UUID) (Game, error) {
+	row := q.db.QueryRowContext(ctx, getAndLockGameByID, id)
+	var i Game
+	err := row.Scan(
+		&i.ID,
+		&i.AccountID,
+		&i.RowAmount,
+		&i.ColumnAmount,
+		&i.AccumulatedSeconds,
+		&i.Board,
+		&i.Mines,
+		&i.MinesLeft,
+		&i.CellsStepped,
+		&i.GameStatus,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
 const getGameByID = `-- name: GetGameByID :one
 select id, account_id, row_amount, column_amount, accumulated_seconds, board, mines, mines_left, cells_stepped, game_status, created_at from game
 where id = $1

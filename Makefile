@@ -40,6 +40,12 @@ build-local: ## Build binary locally
 	cd $(MKFILE_DIR)/src; go build -o $(MKFILE_DIR)/bin/minesweeperapi
 
 run-local: ## Run binary locally
+	DB_HOST=$(DB_HOST) \
+	DB_PORT=$(DB_PORT) \
+	DB_USER=$(DB_USER) \
+	DB_PASSWORD=$(DB_PASSWORD) \
+	DB_NAME=$(DB_NAME) \
+	DB_SSLMODE=$(DB_SSLMODE) \
 	$(MKFILE_DIR)/bin/minesweeperapi
 
 unit-test-local: ## Run unit tests on all packages locally

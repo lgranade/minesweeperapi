@@ -7,6 +7,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/lgranade/minesweeperapi/dao"
+	"github.com/lgranade/minesweeperapi/dao/minesweeper"
 	"github.com/lgranade/minesweeperapi/model"
 )
 
@@ -30,7 +31,7 @@ func Play(ctx context.Context, userID uuid.UUID, gameID uuid.UUID, row int, colu
 
 	defer tx.Rollback()
 
-	dbGame, err := q.GetGameByID(ctx, userID)
+	dbGame, err := q.GetAndLockGameByID(ctx, gameID)
 	if err != nil {
 		if err != sql.ErrNoRows {
 			log.Println("Error occurred querying game: ", err)
@@ -49,7 +50,14 @@ func Play(ctx context.Context, userID uuid.UUID, gameID uuid.UUID, row int, colu
 
 	calculatePlay(game, row, column, action)
 
-	// TODO: write in db
+	_, err = q.UpdateGame(ctx, minesweeper.UpdateGameParams{
+		AccumulatedSeconds: int32(game.AccumulatedSeconds),
+		GameStatus:         string(game.Status),
+		Board:              game.BoardString(),
+		MinesLeft:          int32(game.MinesLeft),
+		CellsStepped:       int32(game.CellsStepped),
+		ID:                 game.ID,
+	})
 
 	if err = tx.Commit(); err != nil {
 		log.Println("Error occurred trying to commit tx: ", err)

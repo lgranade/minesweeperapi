@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"encoding/json"
 	"log"
 	"math/rand"
 	"time"
@@ -28,22 +27,16 @@ func CreateGame(ctx context.Context, userID uuid.UUID, rows int, columns int, mi
 
 	game := buildGame(userID, rows, columns, mines)
 
-	boardRaw, err := json.Marshal(&game.Board)
-	if err != nil {
-		log.Println("An error occurred trying to store in db, err: ", err)
-		return nil, ErrInternal
-	}
-	boardStr := string(boardRaw)
-
 	_, err = q.CreateGame(ctx, minesweeper.CreateGameParams{
 		ID:                 game.ID,
 		AccountID:          game.UserID,
 		RowAmount:          int32(game.Rows),
 		ColumnAmount:       int32(game.Columns),
 		AccumulatedSeconds: int32(game.AccumulatedSeconds),
-		Board:              boardStr,
-		Mines:              int32(mines),
-		MinesLeft:          int32(mines),
+		Board:              game.BoardString(),
+		CellsStepped:       int32(game.CellsStepped),
+		Mines:              int32(game.Mines),
+		MinesLeft:          int32(game.MinesLeft),
 		GameStatus:         string(model.GameCreated),
 	})
 	if err != nil {
@@ -70,6 +63,7 @@ func buildGame(userID uuid.UUID, rows int, columns int, mines int) *model.Game {
 		AccumulatedSeconds: 0,
 		MinesLeft:          mines,
 		Board:              nil,
+		CellsStepped:       0,
 		CellAmount:         rows * columns,
 	}
 	setBoard(game, createMines(game.Rows, game.Columns, game.Mines))

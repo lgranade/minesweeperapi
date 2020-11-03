@@ -15,11 +15,12 @@ type QuerierMockupBuilder struct {
 
 // QuerierMockup is the querier mockup that allows to set the desired handlers to be used in each test
 type QuerierMockup struct {
-	CreateAccountHandler  func(ctx context.Context, arg minesweeper.CreateAccountParams) (minesweeper.Account, error)
-	CreateGameHandler     func(ctx context.Context, arg minesweeper.CreateGameParams) (minesweeper.Game, error)
-	GetGameByIDHandler    func(ctx context.Context, id uuid.UUID) (minesweeper.Game, error)
-	GetAccountByIDHandler func(ctx context.Context, id uuid.UUID) (minesweeper.Account, error)
-	UpdateGameHandler     func(ctx context.Context, arg minesweeper.UpdateGameParams) (minesweeper.Game, error)
+	CreateAccountHandler      func(ctx context.Context, arg minesweeper.CreateAccountParams) (minesweeper.Account, error)
+	CreateGameHandler         func(ctx context.Context, arg minesweeper.CreateGameParams) (minesweeper.Game, error)
+	GetGameByIDHandler        func(ctx context.Context, id uuid.UUID) (minesweeper.Game, error)
+	GetAndLockGameByIDHandler func(ctx context.Context, id uuid.UUID) (minesweeper.Game, error)
+	GetAccountByIDHandler     func(ctx context.Context, id uuid.UUID) (minesweeper.Account, error)
+	UpdateGameHandler         func(ctx context.Context, arg minesweeper.UpdateGameParams) (minesweeper.Game, error)
 }
 
 // TxMockup is a transaction mockup
@@ -76,6 +77,14 @@ func (q *QuerierMockup) CreateAccount(ctx context.Context, arg minesweeper.Creat
 func (q *QuerierMockup) CreateGame(ctx context.Context, arg minesweeper.CreateGameParams) (minesweeper.Game, error) {
 	if q.CreateGameHandler != nil {
 		return q.CreateGameHandler(ctx, arg)
+	}
+	return minesweeper.Game{}, nil
+}
+
+// GetAndLockGameByID simulates reading and locking of a game
+func (q *QuerierMockup) GetAndLockGameByID(ctx context.Context, id uuid.UUID) (minesweeper.Game, error) {
+	if q.GetAndLockGameByIDHandler != nil {
+		return q.GetAndLockGameByIDHandler(ctx, id)
 	}
 	return minesweeper.Game{}, nil
 }

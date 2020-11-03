@@ -12,6 +12,7 @@ type Querier interface {
 	CreateAccount(ctx context.Context, arg CreateAccountParams) (Account, error)
 	CreateGame(ctx context.Context, arg CreateGameParams) (Game, error)
 	GetAccountByID(ctx context.Context, id uuid.UUID) (Account, error)
+	GetAndLockGameByID(ctx context.Context, id uuid.UUID) (Game, error)
 	GetGameByID(ctx context.Context, id uuid.UUID) (Game, error)
 	UpdateGame(ctx context.Context, arg UpdateGameParams) (Game, error)
 }
