@@ -1,8 +1,8 @@
 -- name: CreateGame :one
 insert into game (
-	id, account_id, row_amount, column_amount, accumulated_seconds, board, game_status
+	id, account_id, row_amount, column_amount, accumulated_seconds, board, mines, mines_left, game_status
 ) values (
-	$1, $2, $3, $4, $5, $6, $7
+	$1, $2, $3, $4, $5, $6, $7, $8, $9
 )
 returning *;
 

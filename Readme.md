@@ -34,4 +34,8 @@ $ make build
 
 ## Notes
 
-* In db the name used for user is accout because user is kind of a reserved word in postgresql
+* Randomizer for mine positioning might not be random enought. Should improve this.
+
+* On board creation the mines are created, but it should be done such as to avoid the first click of the user, to make sure he doesn't loose on the first move. Not implemented in first release.
+
+* In db the name used for user is accout because user is kind of a reserved word in postgresql.

@@ -1,12 +1,3 @@
-bitbucket.org/OVLoop/libauthmiddlewarego v1.0.0 h1:OKV8E8Oh5m7R+YqcEoi1vKKsO3xsXn/3lpnxIG95UQk=
-bitbucket.org/OVLoop/libauthmiddlewarego v1.0.0/go.mod h1:jsKyn9S0s+do3GKK1gU8xo0aaIKXl7c1oWhrmj7Gw+E=
-bitbucket.org/OVLoop/libchiloggermiddlewarego v1.0.1 h1:s89U5ZRY/fJ6/Xl/zgkqXxAb51quEGruHmM6QVGhfGQ=
-bitbucket.org/OVLoop/libchiloggermiddlewarego v1.0.1/go.mod h1:LcXFyIYckXDCnowk3RwkO6Pgg1Fj66RgZaIFCknDTlI=
-bitbucket.org/OVLoop/libloggergo v2.0.0+incompatible h1:gqMKmAO/V1Q1KrvYaHrodPh6yRzOvdqv6jxM/CY9cfA=
-bitbucket.org/OVLoop/libloggergo v2.0.0+incompatible/go.mod h1:6c1+LJfQEVDUKFJdyhfoB2/xOjVRopIc7GC1oHwzrvc=
-bitbucket.org/OVLoop/libloggergo v3.0.0+incompatible/go.mod h1:ymG7aR1jeLIqGknehenmt8Flrq6VJHZtqAmjt1aCGOg=
-bitbucket.org/OVLoop/libloggergo v4.0.0+incompatible h1:PvYisMACNklgFi7ZT//s/staSkDHD9nbqUGm0XPY8/k=
-bitbucket.org/OVLoop/libloggergo v4.0.0+incompatible/go.mod h1:2PuYMDJ4ZlpkGb39sfYdcZBkcVOwwDde6yTXNf8clWg=
 github.com/AlekSi/pointer v1.1.0 h1:SSDMPcXD9jSl8FPy9cRzoRaMJtm9g9ggGTxecRUbQoI=
 github.com/AlekSi/pointer v1.1.0/go.mod h1:y7BvfRI3wXPWKXEBhU71nbnIEEZX0QTSB2Bj48UJIZE=
 github.com/auth0/go-jwt-middleware v0.0.0-20200507191422-d30d7b9ece63 h1:LY/kRH+fCqA090FsM2VfZ+oocD99ogm3HrT1r0WDnCk=

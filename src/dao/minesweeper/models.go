@@ -22,6 +22,8 @@ type Game struct {
 	ColumnAmount       int32     `json:"column_amount"`
 	AccumulatedSeconds int32     `json:"accumulated_seconds"`
 	Board              string    `json:"board"`
-	GameStatus         int16     `json:"game_status"`
+	Mines              int32     `json:"mines"`
+	MinesLeft          int32     `json:"mines_left"`
+	GameStatus         string    `json:"game_status"`
 	CreatedAt          time.Time `json:"created_at"`
 }

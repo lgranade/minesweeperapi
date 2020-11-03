@@ -11,11 +11,11 @@ import (
 
 const createGame = `-- name: CreateGame :one
 insert into game (
-	id, account_id, row_amount, column_amount, accumulated_seconds, board, game_status
+	id, account_id, row_amount, column_amount, accumulated_seconds, board, mines, mines_left, game_status
 ) values (
-	$1, $2, $3, $4, $5, $6, $7
+	$1, $2, $3, $4, $5, $6, $7, $8, $9
 )
-returning id, account_id, row_amount, column_amount, accumulated_seconds, board, game_status, created_at
+returning id, account_id, row_amount, column_amount, accumulated_seconds, board, mines, mines_left, game_status, created_at
 `
 
 type CreateGameParams struct {
@@ -25,7 +25,9 @@ type CreateGameParams struct {
 	ColumnAmount       int32     `json:"column_amount"`
 	AccumulatedSeconds int32     `json:"accumulated_seconds"`
 	Board              string    `json:"board"`
-	GameStatus         int16     `json:"game_status"`
+	Mines              int32     `json:"mines"`
+	MinesLeft          int32     `json:"mines_left"`
+	GameStatus         string    `json:"game_status"`
 }
 
 func (q *Queries) CreateGame(ctx context.Context, arg CreateGameParams) (Game, error) {
@@ -36,6 +38,8 @@ func (q *Queries) CreateGame(ctx context.Context, arg CreateGameParams) (Game, e
 		arg.ColumnAmount,
 		arg.AccumulatedSeconds,
 		arg.Board,
+		arg.Mines,
+		arg.MinesLeft,
 		arg.GameStatus,
 	)
 	var i Game
@@ -46,6 +50,8 @@ func (q *Queries) CreateGame(ctx context.Context, arg CreateGameParams) (Game, e
 		&i.ColumnAmount,
 		&i.AccumulatedSeconds,
 		&i.Board,
+		&i.Mines,
+		&i.MinesLeft,
 		&i.GameStatus,
 		&i.CreatedAt,
 	)
@@ -53,7 +59,7 @@ func (q *Queries) CreateGame(ctx context.Context, arg CreateGameParams) (Game, e
 }
 
 const getGameByID = `-- name: GetGameByID :one
-select id, account_id, row_amount, column_amount, accumulated_seconds, board, game_status, created_at from game
+select id, account_id, row_amount, column_amount, accumulated_seconds, board, mines, mines_left, game_status, created_at from game
 where id = $1
 `
 
@@ -67,6 +73,8 @@ func (q *Queries) GetGameByID(ctx context.Context, id uuid.UUID) (Game, error) {
 		&i.ColumnAmount,
 		&i.AccumulatedSeconds,
 		&i.Board,
+		&i.Mines,
+		&i.MinesLeft,
 		&i.GameStatus,
 		&i.CreatedAt,
 	)
@@ -77,12 +85,12 @@ const updateGame = `-- name: UpdateGame :one
 update game
 set accumulated_seconds = $1, game_status = $2, board = $3
 where id = $4
-returning id, account_id, row_amount, column_amount, accumulated_seconds, board, game_status, created_at
+returning id, account_id, row_amount, column_amount, accumulated_seconds, board, mines, mines_left, game_status, created_at
 `
 
 type UpdateGameParams struct {
 	AccumulatedSeconds int32     `json:"accumulated_seconds"`
-	GameStatus         int16     `json:"game_status"`
+	GameStatus         string    `json:"game_status"`
 	Board              string    `json:"board"`
 	ID                 uuid.UUID `json:"id"`
 }
@@ -102,6 +110,8 @@ func (q *Queries) UpdateGame(ctx context.Context, arg UpdateGameParams) (Game, e
 		&i.ColumnAmount,
 		&i.AccumulatedSeconds,
 		&i.Board,
+		&i.Mines,
+		&i.MinesLeft,
 		&i.GameStatus,
 		&i.CreatedAt,
 	)

@@ -371,7 +371,7 @@ components:
         id:
           type: string
           format: uuid
-        user:
+        userId:
           type: string
           format: uuid
         status:
@@ -391,11 +391,26 @@ components:
           items:
             type: array
             items:
-              type: integer
-              example: 1          
+              $ref: '#/components/schemas/Cell'
         createdAt:
           type: integer
           format: timestamp
+    Cell:
+      title: Cell
+      type: object
+      description: One board cell
+      properties:
+        t:
+          type: string
+          enum: [m, n, e]
+          description: "Indicates type of cell: m-> mine, n->number, e->empty"
+        a:
+          type: integer
+          enum: [n, s, f]
+          description: "Indicates action the user executed in this cell: n-> none, s->step, f->flag"          
+        v:
+          type: integer
+          description: "value in case it's type n"          
     Error:
       title: Error
       type: object
