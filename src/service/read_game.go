@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"log"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/lgranade/minesweeperapi/dao"
@@ -50,5 +51,7 @@ func fillGameFromDB(mGame *model.Game, dbGame *minesweeper.Game) error {
 		log.Println("Can't load board from db")
 		return ErrInternal
 	}
+
+	mGame.PlayingSeconds = mGame.AccumulatedSeconds + int(time.Now().Unix()-mGame.ResumedAt)
 	return nil
 }

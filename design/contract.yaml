@@ -382,7 +382,7 @@ components:
           type: integer
         mines:
           type: integer
-        accumulatedSeconds:
+        playingSeconds:
           type: integer
         minesLeft:
           type: integer
