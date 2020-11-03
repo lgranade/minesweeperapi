@@ -1,12 +1,35 @@
 package service
 
 import (
+	"context"
+	"database/sql"
 	"encoding/json"
 	"log"
 
+	"github.com/google/uuid"
+	"github.com/lgranade/minesweeperapi/dao"
 	"github.com/lgranade/minesweeperapi/dao/minesweeper"
 	"github.com/lgranade/minesweeperapi/model"
 )
+
+// ReadGame reads game from db
+func ReadGame(ctx context.Context, gameID uuid.UUID) (*model.Game, error) {
+	q := dao.GetQuerier().WithoutTx()
+
+	dbGame, err := q.GetGameByID(ctx, gameID)
+	if err != nil {
+		if err != sql.ErrNoRows {
+			log.Println("Error occurred querying game: ", err)
+			return nil, ErrInternal
+		}
+		return nil, ErrNonexistentGame
+	}
+
+	game := &model.Game{}
+	fillGameFromDB(game, &dbGame)
+
+	return game, nil
+}
 
 func fillGameFromDB(mGame *model.Game, dbGame *minesweeper.Game) error {
 	mGame.ID = dbGame.ID

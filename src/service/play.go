@@ -84,6 +84,9 @@ func calculatePlay(game *model.Game, row int, column int, action PlayAction) err
 	} else if action == StepPlay {
 		stepPlay(cell)
 	}
+
+	// TODO: check if game finished
+
 	return nil
 }
 

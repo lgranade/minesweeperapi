@@ -36,11 +36,11 @@ func Play(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	game, err := service.Play(r.Context(), hardcodedUserID, gameID, *reqB.Row, *reqB.Column, reqB.Action)
+	game, err := service.Play(r.Context(), service.HardcodedUserID, gameID, *reqB.Row, *reqB.Column, reqB.Action)
 	if err != nil {
 		apiError(w, r, http.StatusInternalServerError, "Couldn't make the play, report error", 0)
 		return
 	}
 
-	apiResponse(w, r, http.StatusCreated, game)
+	apiResponse(w, r, http.StatusOK, game)
 }
