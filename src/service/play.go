@@ -56,7 +56,7 @@ func Play(ctx context.Context, userID uuid.UUID, gameID uuid.UUID, row int, colu
 	}
 
 	if game.UserID != userID {
-		log.Println("Game belongs to differen user")
+		log.Println("Game belongs to different user")
 		return nil, ErrForbidden
 	}
 

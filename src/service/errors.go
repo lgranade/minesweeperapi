@@ -22,3 +22,6 @@ var ErrGameNonCompatibleStatus = errors.New("Game with not compatible status")
 
 // ErrUnrecognizedAction is returned when trying to perform unrecognized action
 var ErrUnrecognizedAction = errors.New("Action not recognized")
+
+// ErrDuplicatedUser is returned when user with same name already exist
+var ErrDuplicatedUser = errors.New("User with same name already exists")

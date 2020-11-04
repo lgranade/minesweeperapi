@@ -28,21 +28,18 @@ func createRoutes() (chi.Router, error) {
 		cors.Handler,
 	)
 
-	// TODO: implement commented routes
-	// r.Post("/auth", controller.Authenticate)
-
+	r.Post("/auth", controller.Authenticate)
 	r.Post("/users", controller.CreateUser)
 
 	r.Group(func(r chi.Router) {
 		// TODO: add auth middleware on this router group.
 		// That middleware will validate access token and leave user id in context.
 
-		// TODO: implement commented routes
 		r.Get("/users/{userID}", controller.ReadUser)
 		r.Post("/games", controller.CreateGame)
 		r.Get("/games/{gameID}", controller.ReadGame)
 		r.Post("/games/{gameID}/play", controller.Play)
-		// r.Post("/games/{gameID}/pause", controller.Pause)
+		r.Post("/games/{gameID}/pause", controller.Pause)
 	})
 
 	return r, nil

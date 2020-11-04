@@ -10,14 +10,6 @@ import (
 	"github.com/lgranade/minesweeperapi/model"
 )
 
-// HardcodedUserID is here to get first version without reading access token
-// TODO: take this from access token
-var HardcodedUserID uuid.UUID
-
-func init() {
-	HardcodedUserID, _ = uuid.Parse("e341410d-752a-404f-9acc-904764fd38f3")
-}
-
 // CreateUser creates a user
 func CreateUser(ctx context.Context, name string, password string) (*model.User, error) {
 	q, tx, err := dao.GetQuerier().WithTx()
@@ -28,13 +20,19 @@ func CreateUser(ctx context.Context, name string, password string) (*model.User,
 
 	defer tx.Rollback()
 
+	userID := uuid.New()
+
 	dbAccount, err := q.CreateAccount(ctx, minesweeper.CreateAccountParams{
-		ID:            HardcodedUserID,
+		ID:            userID,
 		LoginName:     name,
 		LoginPassword: password,
 	})
+
+	if dao.IsPQIntegrityViolationError(err) {
+		log.Println("Can't create user in local db, violating constraint: ", err)
+		return nil, ErrDuplicatedUser
+	}
 	if err != nil {
-		// TODO: check for non unique constraint
 		log.Println("Error occurred creating user in local db: ", err)
 		return nil, ErrInternal
 	}

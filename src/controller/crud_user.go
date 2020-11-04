@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -31,6 +32,10 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	user, err := service.CreateUser(r.Context(), reqB.Name, reqB.Password)
 	if err != nil {
+		if errors.Is(err, service.ErrDuplicatedUser) {
+			apiError(w, r, http.StatusConflict, "User name already used by someone else", IErrorNameAlreadyInUse)
+			return
+		}
 		apiError(w, r, http.StatusInternalServerError, "Couldn't create the user, report error", 0)
 		return
 	}
@@ -48,7 +53,10 @@ func ReadUser(w http.ResponseWriter, r *http.Request) {
 
 	user, err := service.ReadUser(r.Context(), userID)
 	if err != nil {
-		// TODO: check for more errors
+		if errors.Is(err, service.ErrNonexistentUser) {
+			apiError(w, r, http.StatusNotFound, "User not found", IErrorNonexistentUser)
+			return
+		}
 		apiError(w, r, http.StatusInternalServerError, "Couldn't read user, report error", 0)
 		return
 	}

@@ -14,20 +14,35 @@ import (
 )
 
 // ReadGame reads game from db
-func ReadGame(ctx context.Context, gameID uuid.UUID) (*model.Game, error) {
+func ReadGame(ctx context.Context, userID uuid.UUID, gameID uuid.UUID) (*model.Game, error) {
 	q := dao.GetQuerier().WithoutTx()
 
-	dbGame, err := q.GetGameByID(ctx, gameID)
+	_, err := q.GetAccountByID(ctx, userID)
+	if err == sql.ErrNoRows {
+		log.Println("Non existent user in db by id: ", userID)
+		return nil, ErrNonexistentUser
+	}
 	if err != nil {
-		if err != sql.ErrNoRows {
-			log.Println("Error occurred querying game: ", err)
-			return nil, ErrInternal
-		}
+		log.Println("Error reading user from local db: ", err)
+		return nil, ErrInternal
+	}
+
+	dbGame, err := q.GetGameByID(ctx, gameID)
+	if err == sql.ErrNoRows {
+		log.Println("Non existent game in db by id: ", gameID)
 		return nil, ErrNonexistentGame
+	}
+	if err != nil {
+		log.Println("Error reading game from local db: ", err)
+		return nil, ErrInternal
 	}
 
 	game := &model.Game{}
 	fillGameFromDB(game, &dbGame)
+
+	if game.UserID != userID {
+		return nil, ErrForbidden
+	}
 
 	return game, nil
 }

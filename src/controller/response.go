@@ -57,7 +57,18 @@ const (
 	IErrorNotAuthorized = iota + 20200
 )
 
+// HTTP 403
+const (
+	IErrorForbidden = iota + 20400
+)
+
 // HTTP 404
 const (
-	IErrorNonexistentGame = iota + 20500
+	IErrorNonexistentUser = iota + 20500
+	IErrorNonexistentGame
+)
+
+// HTTP 409
+const (
+	IErrorNameAlreadyInUse = iota + 20600
 )

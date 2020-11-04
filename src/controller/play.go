@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -36,8 +37,15 @@ func Play(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	game, err := service.Play(r.Context(), service.HardcodedUserID, gameID, *reqB.Row, *reqB.Column, reqB.Action)
+	game, err := service.Play(r.Context(), hardcodedUserID, gameID, *reqB.Row, *reqB.Column, reqB.Action)
 	if err != nil {
+		if errors.Is(err, service.ErrForbidden) {
+			apiError(w, r, http.StatusForbidden, "Operation nor allowed", IErrorForbidden)
+			return
+		} else if errors.Is(err, service.ErrNonexistentGame) {
+			apiError(w, r, http.StatusNotFound, "Nonexistent Game", IErrorNonexistentGame)
+			return
+		}
 		apiError(w, r, http.StatusInternalServerError, "Couldn't make the play, report error", 0)
 		return
 	}

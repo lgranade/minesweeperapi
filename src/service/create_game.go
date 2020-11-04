@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"database/sql"
 	"log"
 	"math/rand"
 	"time"
@@ -23,7 +24,15 @@ func CreateGame(ctx context.Context, userID uuid.UUID, rows int, columns int, mi
 
 	defer tx.Rollback()
 
-	// TODO: check the user actually exists in db, if not return forbidden
+	_, err = q.GetAccountByID(ctx, userID)
+	if err == sql.ErrNoRows {
+		log.Println("Non existent user in db by id: ", userID)
+		return nil, ErrNonexistentUser
+	}
+	if err != nil {
+		log.Println("Error reading user from local db: ", err)
+		return nil, ErrInternal
+	}
 
 	game := buildGame(userID, rows, columns, mines)
 

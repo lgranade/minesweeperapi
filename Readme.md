@@ -32,9 +32,9 @@ To build the image just run
 $ make build
 ```
 
-## Notes
+## Important Notes about implementation
 
-* User should be taken from access token by design but first version has user id hardcoded.
+* Since auth endpoint is not implemented, there is no token generation. This token is used by the api to know what user is making the call. Currently all game endpoints (not user management) ignore token and assume the call is being made by the same hardcoded user (id: e341410d-752a-404f-9acc-904764fd38f3). This hardcoded user was created in a migration.
 
 * Randomizer for mine positioning might not be random enought. Should improve this.
 
