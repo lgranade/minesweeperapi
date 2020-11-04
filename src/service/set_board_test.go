@@ -9,6 +9,15 @@ import (
 	"github.com/lgranade/minesweeperapi/model"
 )
 
+// 6 by 6 Board for unit testing algos
+//
+// 1 1 1 0 1 X
+// 1 X 1 0 1 1
+// 1 1 1 0 0 0
+// 1 1 1 0 0 0
+// 2 X 3 1 1 0
+// 2 X 3 X 1 0
+
 var game6By6 = &model.Game{
 	ID:                 uuid.New(),
 	UserID:             uuid.New(),
