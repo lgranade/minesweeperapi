@@ -361,7 +361,7 @@ components:
         name:
           type: string
         createdAt:
-          type: integer
+          type: string
           format: timestamp
     Game:
       title: Game
@@ -393,7 +393,7 @@ components:
             items:
               $ref: '#/components/schemas/Cell'
         createdAt:
-          type: integer
+          type: string
           format: timestamp
     Cell:
       title: Cell
@@ -402,15 +402,15 @@ components:
       properties:
         t:
           type: string
-          enum: [m, n, e]
-          description: "Indicates type of cell: m-> mine, n->number, e->empty"
+          enum: [m, n]
+          description: "Indicates type of cell: m-> mine, n->number. Number cells with value 0 are empty cells."
         a:
           type: integer
           enum: [n, s, f]
           description: "Indicates action the user executed in this cell: n-> none, s->step, f->flag"          
         v:
           type: integer
-          description: "value in case it's type n"          
+          description: "value in case it's type number"
     Error:
       title: Error
       type: object

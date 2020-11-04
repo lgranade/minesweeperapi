@@ -51,7 +51,7 @@ func Play(ctx context.Context, userID uuid.UUID, gameID uuid.UUID, row int, colu
 	}
 	if game.Status == model.GameCreated ||
 		game.Status == model.GamePaused {
-		game.ResumedAt = time.Now().Unix()
+		game.ResumedAt = time.Now().UTC()
 		game.Status = model.GamePlaying
 	}
 
@@ -71,7 +71,7 @@ func Play(ctx context.Context, userID uuid.UUID, gameID uuid.UUID, row int, colu
 		Board:              game.BoardString(),
 		MinesLeft:          int32(game.MinesLeft),
 		CellsStepped:       int32(game.CellsStepped),
-		ResumedAt:          time.Unix(game.ResumedAt, 0),
+		ResumedAt:          game.ResumedAt,
 		ID:                 game.ID,
 	})
 
@@ -107,7 +107,7 @@ func calculatePlay(game *model.Game, coord model.Coord, action PlayAction) error
 
 	if game.CellAmount-game.CellsStepped == game.Mines {
 		game.Status = model.GameWon
-		game.AccumulatedSeconds += int(time.Now().Unix() - game.ResumedAt)
+		game.AccumulatedSeconds += int(time.Now().UTC().Sub(game.ResumedAt).Seconds())
 	}
 
 	return nil

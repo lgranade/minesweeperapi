@@ -33,5 +33,5 @@ func ReadUser(ctx context.Context, userID uuid.UUID) (*model.User, error) {
 func fillUserFromDB(mUser *model.User, dbAccount *minesweeper.Account) {
 	mUser.ID = dbAccount.ID
 	mUser.Name = dbAccount.LoginName
-	mUser.CreatedAt = dbAccount.CreatedAt.Unix()
+	mUser.CreatedAt = dbAccount.CreatedAt
 }

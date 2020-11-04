@@ -58,8 +58,8 @@ func fillGameFromDB(mGame *model.Game, dbGame *minesweeper.Game) error {
 	mGame.CellAmount = mGame.Rows * mGame.Columns
 	mGame.Rows = int(dbGame.RowAmount)
 	mGame.Columns = int(dbGame.ColumnAmount)
-	mGame.CreatedAt = dbGame.CreatedAt.Unix()
-	mGame.ResumedAt = dbGame.ResumedAt.Unix()
+	mGame.CreatedAt = dbGame.CreatedAt
+	mGame.ResumedAt = dbGame.ResumedAt
 
 	err := json.Unmarshal([]byte(dbGame.Board), &mGame.Board)
 	if err != nil {
@@ -67,6 +67,10 @@ func fillGameFromDB(mGame *model.Game, dbGame *minesweeper.Game) error {
 		return ErrInternal
 	}
 
-	mGame.PlayingSeconds = mGame.AccumulatedSeconds + int(time.Now().Unix()-mGame.ResumedAt)
+	if mGame.Status == model.GamePlaying {
+		mGame.PlayingSeconds = mGame.AccumulatedSeconds + int(time.Now().UTC().Sub(mGame.ResumedAt).Seconds())
+	} else {
+		mGame.PlayingSeconds = mGame.AccumulatedSeconds
+	}
 	return nil
 }

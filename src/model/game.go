@@ -3,6 +3,7 @@ package model
 import (
 	"encoding/json"
 	"log"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -18,11 +19,11 @@ type Game struct {
 	AccumulatedSeconds int        `json:"-"`
 	PlayingSeconds     int        `json:"playingSeconds"`
 	MinesLeft          int        `json:"minesLeft"`
-	CreatedAt          int64      `json:"createdAt"`
+	CreatedAt          time.Time  `json:"createdAt"`
 	Board              [][]Cell   `json:"board,omitempty"`
 	CellsStepped       int        `json:"-"`
 	CellAmount         int        `json:"-"`
-	ResumedAt          int64      `json:"-"`
+	ResumedAt          time.Time  `json:"-"`
 }
 
 // GameStatus represents the status of the game
