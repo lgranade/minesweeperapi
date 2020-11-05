@@ -20,6 +20,6 @@ COPY --from=builder \
 
 EXPOSE 8080
 
-CMD ["/opt/mineswpeerapi/mineswpeerapi"]
+CMD ["/opt/mineswpeerapi/minesweeperapi"]
 
 #***********************************************

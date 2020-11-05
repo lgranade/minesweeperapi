@@ -61,6 +61,7 @@ start-container: ## Run deployable image
 	docker run -d --rm \
 		-p $(API_PORT):8080 \
 		--env-file="$(MKFILE_DIR)/config_run.env" \
+		--net=host \
 		--name="$(APP_NAME)" $(APP_NAME)
 
 logs-container: ## Follow container logs
